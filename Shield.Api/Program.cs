@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Shield.Api.Services;
+using Wolverine;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,10 @@ builder.Services
     });
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IPaymentFraudAssessmentService, PaymentFraudAssessmentService>();
+builder.Services.AddSingleton<IHumanReviewService, HumanReviewService>();
+builder.Services.AddSingleton<INotificationService, NotificationService>();
+
+builder.Host.UseWolverine();
 
 var app = builder.Build();
 

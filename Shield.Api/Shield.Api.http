@@ -1,6 +1,0 @@
-@Shield.Api_HostAddress = http://localhost:5244
-
-GET {{Shield.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

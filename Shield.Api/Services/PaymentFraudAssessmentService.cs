@@ -1,10 +1,15 @@
+using Shield.Api.Messaging.Events;
 using Shield.Api.Models;
+using Wolverine;
 
 namespace Shield.Api.Services;
 
-public sealed class PaymentFraudAssessmentService : IPaymentFraudAssessmentService
+public sealed class PaymentFraudAssessmentService(
+    IMessageContext messageContext,
+    ILogger<PaymentFraudAssessmentService> logger)
+    : IPaymentFraudAssessmentService
 {
-    public PaymentFraudAssessmentResult Assess(PaymentFraudCheckRequest request)
+    public async Task<PaymentFraudAssessmentResult> Assess(PaymentFraudCheckRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -48,12 +53,61 @@ public sealed class PaymentFraudAssessmentService : IPaymentFraudAssessmentServi
         }
 
         riskScore = Math.Clamp(riskScore, 0, 1);
+        var roundedRiskScore = Math.Round(riskScore, 2);
 
-        return new PaymentFraudAssessmentResult
+        var assessment = new PaymentFraudAssessmentResult
         {
-            IsLikelyFraud = riskScore >= 0.5,
-            RiskScore = Math.Round(riskScore, 2),
+            IsLikelyFraud = roundedRiskScore >= 0.5,
+            RiskScore = roundedRiskScore,
             Reasons = reasons
         };
+
+        await PublishMessagesAsync(request, reasons);
+
+        return assessment;
+    }
+
+    private async Task PublishMessagesAsync(
+        PaymentFraudCheckRequest request,
+        IReadOnlyCollection<PaymentFraudReason> reasons)
+    {
+        if (reasons.Contains(PaymentFraudReason.RecentFailedLogins))
+        {
+            await messageContext.PublishAsync(
+                new HumanInterventionRequested
+                {
+                    TransactionId = request.TransactionId,
+                    UserId = request.UserId,
+                    Amount = request.Amount,
+                    Currency = request.Currency,
+                    Timestamp = request.Timestamp,
+                    FailedLoginsLast24h = request.AuthContext.FailedLoginsLast24h,
+                    Reason = PaymentFraudReason.RecentFailedLogins
+                });
+
+            logger.LogDebug(
+                "Published HumanInterventionRequested for transaction {TransactionId}.",
+                request.TransactionId);
+        }
+
+        if (reasons.Contains(PaymentFraudReason.NewPayee))
+        {
+            await messageContext.PublishAsync(
+                new PayeeVerificationRequested
+                {
+                    TransactionId = request.TransactionId,
+                    UserId = request.UserId,
+                    Amount = request.Amount,
+                    Currency = request.Currency,
+                    Timestamp = request.Timestamp,
+                    PayeeAccountId = request.Payee.AccountId,
+                    MerchantCategory = request.Payee.MerchantCategory,
+                    Reason = PaymentFraudReason.NewPayee
+                });
+
+            logger.LogDebug(
+                "Published PayeeVerificationRequested for transaction {TransactionId}.",
+                request.TransactionId);
+        }
     }
 }

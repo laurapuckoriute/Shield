@@ -4,5 +4,7 @@ namespace Shield.Api.Services;
 
 public interface IPaymentFraudAssessmentService
 {
-    PaymentFraudAssessmentResult Assess(PaymentFraudCheckRequest request);
+    Task<PaymentFraudAssessmentResult> Assess(
+        PaymentFraudCheckRequest request,
+        CancellationToken cancellationToken = default);
 }
