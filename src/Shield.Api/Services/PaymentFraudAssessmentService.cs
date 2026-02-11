@@ -11,8 +11,6 @@ public sealed class PaymentFraudAssessmentService(
 {
     public async Task<PaymentFraudAssessmentResult> Assess(PaymentFraudCheckRequest request, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(request);
-
         var riskScore = 0.0;
         var reasons = new List<PaymentFraudReason>();
 

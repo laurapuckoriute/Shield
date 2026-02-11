@@ -5,14 +5,14 @@ using Shield.Api.Models;
 using Shield.Api.Services;
 using Wolverine;
 
-namespace Shield.Api.UnitTests;
+namespace Shield.Api.UnitTests.Services;
 
 [TestClass]
 public sealed class PaymentFraudAssessmentServiceTests
 {
     private Mock<IMessageContext> _messageContextMock;
     private Mock<ILogger<PaymentFraudAssessmentService>> _loggerMock;
-    private PaymentFraudAssessmentService _serviceUnderTest;
+    private PaymentFraudAssessmentService _systemUnderTest;
 
     [TestInitialize]
     public void Setup()
@@ -20,7 +20,7 @@ public sealed class PaymentFraudAssessmentServiceTests
         _messageContextMock = new Mock<IMessageContext>();
         _loggerMock = new Mock<ILogger<PaymentFraudAssessmentService>>();
         
-        _serviceUnderTest = new PaymentFraudAssessmentService(_messageContextMock.Object, _loggerMock.Object);
+        _systemUnderTest = new PaymentFraudAssessmentService(_messageContextMock.Object, _loggerMock.Object);
         
         _messageContextMock
             .Setup(m => m.PublishAsync(It.IsAny<HumanInterventionRequested>(), It.IsAny<DeliveryOptions?>()))
@@ -36,7 +36,7 @@ public sealed class PaymentFraudAssessmentServiceTests
     {
         var request = CreateRequest(amount: 6000m, newPayee: true);
 
-        var result = await _serviceUnderTest.Assess(request);
+        var result = await _systemUnderTest.Assess(request);
 
         Assert.IsTrue(result.IsLikelyFraud);
         Assert.AreEqual(0.6, result.RiskScore);
@@ -54,7 +54,7 @@ public sealed class PaymentFraudAssessmentServiceTests
     {
         var request = CreateRequest();
 
-        var result = await _serviceUnderTest.Assess(request);
+        var result = await _systemUnderTest.Assess(request);
 
         Assert.IsFalse(result.IsLikelyFraud);
         Assert.AreEqual(0.0, result.RiskScore);
@@ -67,7 +67,7 @@ public sealed class PaymentFraudAssessmentServiceTests
     {
         var request = CreateRequest(failedLogins: 2);
 
-        await _serviceUnderTest.Assess(request);
+        await _systemUnderTest.Assess(request);
 
         var publishedEvent = _messageContextMock.Invocations
             .Select(invocation => invocation.Arguments.FirstOrDefault())
@@ -88,7 +88,7 @@ public sealed class PaymentFraudAssessmentServiceTests
     {
         var request = CreateRequest(newPayee: true, merchantCategory: PaymentMerchantCategory.Crypto);
 
-        await _serviceUnderTest.Assess(request);
+        await _systemUnderTest.Assess(request);
 
         var publishedEvent = _messageContextMock.Invocations
             .Select(invocation => invocation.Arguments.FirstOrDefault())

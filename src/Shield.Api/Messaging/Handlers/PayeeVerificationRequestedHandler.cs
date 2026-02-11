@@ -1,5 +1,5 @@
 using Shield.Api.Messaging.Events;
-using Shield.Api.Services;
+using Shield.Api.Services.Downstream;
 
 namespace Shield.Api.Messaging.Handlers;
 

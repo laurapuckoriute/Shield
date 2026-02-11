@@ -1,6 +1,6 @@
 using Shield.Api.Messaging.Events;
 
-namespace Shield.Api.Services;
+namespace Shield.Api.Services.Downstream;
 
 public sealed class NotificationService(ILogger<NotificationService> logger) : INotificationService
 {

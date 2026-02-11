@@ -1,4 +1,2 @@
-- write unit tests
-- add auth
-- add validation
-- add DB layer
+- Add DB layer
+- Complete unit tests

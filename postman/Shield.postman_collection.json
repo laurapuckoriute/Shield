@@ -44,6 +44,128 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "AssessPayment - No Further Processing Required",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"transactionId\": \"tx-984723\",\n  \"userId\": \"u123\",\n  \"amount\": 9200,\n  \"currency\": \"EUR\",\n  \"timestamp\": \"2026-02-10T14:20:00Z\",\n  \"payer\": {\n    \"accountId\": \"ACC123\",\n    \"country\": \"DE\"\n  },\n  \"payee\": {\n    \"accountId\": \"ACC987\",\n    \"isNewPayee\": false,\n    \"merchantCategory\": \"CRYPTO\"\n  },\n  \"device\": {\n    \"deviceId\": \"iphone-14\",\n    \"isNewDevice\": true\n  },\n  \"network\": {\n    \"ipAddress\": \"185.23.11.9\",\n    \"country\": \"RO\"\n  },\n  \"authContext\": {\n    \"failedLoginsLast24h\": 0,\n    \"lastLoginCountry\": \"DE\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/payment/fraud-check",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "payment",
+            "fraud-check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AssessPayment - Payee Verification required",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"transactionId\": \"tx-984723\",\n  \"userId\": \"u123\",\n  \"amount\": 9200,\n  \"currency\": \"EUR\",\n  \"timestamp\": \"2026-02-10T14:20:00Z\",\n  \"payer\": {\n    \"accountId\": \"ACC123\",\n    \"country\": \"DE\"\n  },\n  \"payee\": {\n    \"accountId\": \"ACC987\",\n    \"isNewPayee\": true,\n    \"merchantCategory\": \"CRYPTO\"\n  },\n  \"device\": {\n    \"deviceId\": \"iphone-14\",\n    \"isNewDevice\": true\n  },\n  \"network\": {\n    \"ipAddress\": \"185.23.11.9\",\n    \"country\": \"RO\"\n  },\n  \"authContext\": {\n    \"failedLoginsLast24h\": 0,\n    \"lastLoginCountry\": \"DE\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/payment/fraud-check",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "payment",
+            "fraud-check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AssessPayment - Human Review required",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"transactionId\": \"tx-984723\",\n  \"userId\": \"u123\",\n  \"amount\": 9200,\n  \"currency\": \"EUR\",\n  \"timestamp\": \"2026-02-10T14:20:00Z\",\n  \"payer\": {\n    \"accountId\": \"ACC123\",\n    \"country\": \"DE\"\n  },\n  \"payee\": {\n    \"accountId\": \"ACC987\",\n    \"isNewPayee\": false,\n    \"merchantCategory\": \"CRYPTO\"\n  },\n  \"device\": {\n    \"deviceId\": \"iphone-14\",\n    \"isNewDevice\": true\n  },\n  \"network\": {\n    \"ipAddress\": \"185.23.11.9\",\n    \"country\": \"RO\"\n  },\n  \"authContext\": {\n    \"failedLoginsLast24h\": 3,\n    \"lastLoginCountry\": \"DE\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/payment/fraud-check",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "payment",
+            "fraud-check"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "event": [
