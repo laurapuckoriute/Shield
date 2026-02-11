@@ -10,7 +10,6 @@ builder.Services
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-builder.Services.AddOpenApi();
 builder.Services.AddScoped<IPaymentFraudAssessmentService, PaymentFraudAssessmentService>();
 builder.Services.AddSingleton<IHumanReviewService, HumanReviewService>();
 builder.Services.AddSingleton<INotificationService, NotificationService>();
@@ -18,11 +17,6 @@ builder.Services.AddSingleton<INotificationService, NotificationService>();
 builder.Host.UseWolverine();
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
 
 app.UseHttpsRedirection();
 
