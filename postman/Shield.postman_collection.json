@@ -1,0 +1,83 @@
+{
+  "info": {
+    "_postman_id": "327e80a3-ad83-48e6-906e-df8146323d7d",
+    "name": "Shield",
+    "description": "Requests for the Shield Payment Fraud Assessment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18722227"
+  },
+  "item": [
+    {
+      "name": "AssessPayment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"transactionId\": \"tx-984723\",\n  \"userId\": \"u123\",\n  \"amount\": 9200,\n  \"currency\": \"EUR\",\n  \"timestamp\": \"2026-02-10T14:20:00Z\",\n  \"payer\": {\n    \"accountId\": \"ACC123\",\n    \"country\": \"DE\"\n  },\n  \"payee\": {\n    \"accountId\": \"ACC987\",\n    \"isNewPayee\": true,\n    \"merchantCategory\": \"CRYPTO\"\n  },\n  \"device\": {\n    \"deviceId\": \"iphone-14\",\n    \"isNewDevice\": true\n  },\n  \"network\": {\n    \"ipAddress\": \"185.23.11.9\",\n    \"country\": \"RO\"\n  },\n  \"authContext\": {\n    \"failedLoginsLast24h\": 3,\n    \"lastLoginCountry\": \"DE\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/payment/fraud-check",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "payment",
+            "fraud-check"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": ""
+    },
+    {
+      "key": "apiKey",
+      "value": ""
+    }
+  ]
+}
